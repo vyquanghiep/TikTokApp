@@ -1,18 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-const BottomTab = createBottomTabNavigator();
+import React, {useState} from "react"
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator, useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import VideoItem from "./VideoItem";
+import {data} from "./constants";
+import {WINDOW_HEIGHT} from "./constants";
+
+const Tab = createBottomTabNavigator();
+
+const HomeScreen =() => {
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+
+  const bottomTabHeight = useBottomTabBarHeight();
+
+  return <FlatList
+  data={data}
+  pagingEnabled
+  renderItem={({item, index}) => (
+    <VideoItem data={item} isActive={activeVideoIndex === index} />
+  )}
+  onScroll={e => {
+    const index = Math.round(
+      e.nativeEvent.contentOffset.y / (WINDOW_HEIGHT - bottomTabHeight),
+    );
+    setActiveVideoIndex(index);
+  }}
+/>;
+}
 export default function App() {
    return (
     <NavigationContainer>
-    <BottomTab.Navigator
+    <Tab.Navigator
       screenOptions={{
         tabBarStyle: {backgroundColor: 'black'},
         headerShown: false,
         tabBarActiveTintColor: 'white',
       }}>
-      <BottomTab.Screen
+      <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
@@ -27,7 +52,7 @@ export default function App() {
           ),
         }}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="Discover"
         component={HomeScreen}
         options={{
@@ -42,7 +67,7 @@ export default function App() {
           ),
         }}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="NewVideo"
         component={HomeScreen}
         options={{
@@ -58,7 +83,7 @@ export default function App() {
           ),
         }}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="Inbox"
         component={HomeScreen}
         options={{
@@ -73,7 +98,7 @@ export default function App() {
           ),
         }}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="Profile"
         component={HomeScreen}
         options={{
@@ -88,7 +113,7 @@ export default function App() {
           ),
         }}
       />
-    </BottomTab.Navigator>
+    </Tab.Navigator>
     </NavigationContainer>
   );
 };
