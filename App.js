@@ -1,134 +1,88 @@
-import React, {useState} from "react"
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator, useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import VideoItem from "./VideoItem";
-import {data} from "./constants";
-import {WINDOW_HEIGHT} from "./constants";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HomeScreen from './src/screens/HomeScreen';
+import ReelsScreen from './src/screens/ReelsScreen';
+import SearchStack from './src/navigation/SearchStack';
+import GroupStack from './src/navigation/GroupStack';
+import AccountStack from './src/navigation/AccountStack';
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen =() => {
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
-
-  const bottomTabHeight = useBottomTabBarHeight();
-
-  return <FlatList
-  data={data}
-  pagingEnabled
-  renderItem={({item, index}) => (
-    <VideoItem data={item} isActive={activeVideoIndex === index} />
-  )}
-  onScroll={e => {
-    const index = Math.round(
-      e.nativeEvent.contentOffset.y / (WINDOW_HEIGHT - bottomTabHeight),
-    );
-    setActiveVideoIndex(index);
-  }}
-/>;
-}
 export default function App() {
-   return (
+  return (
     <NavigationContainer>
-    <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: {backgroundColor: 'black'},
-        headerShown: false,
-        tabBarActiveTintColor: 'white',
-      }}>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={require('./assets/images/home.png')}
-              style={[
-                styles.bottomTabIcon,
-                focused && styles.bottomTabIconFocused,
-              ]}
-            />
-          ),
+      <Tab.Navigator
+        initialRouteName="TabHome"
+        screenOptions={{
+          tabBarActiveTintColor: '#f12711',
+          headerShown: false,
         }}
-      />
-      <Tab.Screen
-        name="Discover"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={require('./assets/images/search.png')}
-              style={[
-                styles.bottomTabIcon,
-                focused && styles.bottomTabIconFocused,
-              ]}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="NewVideo"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: () => null,
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={require('./assets/images/new-video.png')}
-              style={[
-                styles.newVideoButton,
-                focused && styles.bottomTabIconFocused,
-              ]}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Inbox"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={require('./assets/images/message.png')}
-              style={[
-                styles.bottomTabIcon,
-                focused && styles.bottomTabIconFocused,
-              ]}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={require('./assets/images/user.png')}
-              style={[
-                styles.bottomTabIcon,
-                focused && styles.bottomTabIconFocused,
-              ]}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+      >
+        <Tab.Screen
+          name="TabHome"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="TabSearch"
+          component={SearchStack}
+          options={{
+            tabBarLabel: 'Search',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="magnify"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="TabGroup"
+          component={GroupStack}
+          options={{
+            tabBarLabel: 'Group',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="account-group"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="TabAccount"
+          component={AccountStack}
+          options={{
+            tabBarLabel: 'Account',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="account"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="TabQRScan"
+          component={ReelsScreen}
+          options={{
+            tabBarLabel: 'QR Scan',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="qrcode" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  bottomTabIcon: {
-    width: 20,
-    height: 20,
-    tintColor: 'grey',
-  },
-  bottomTabIconFocused: {
-    tintColor: 'white',
-  },
-  newVideoButton: {
-    width: 48,
-    height: 24,
-  },
-});
+}

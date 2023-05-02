@@ -1,17 +1,27 @@
+# React Native
 node_modules/
-.expo/
-dist/
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
+npm-debug.log
+yarn-error.log
+*.env
 
-# macOS
+# OS generated files
 .DS_Store
+Thumbs.db
 
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+*.log
+*.orig
+*.swp
+*~
+*.bak
+*.cache
+*.tmp
+
+# Build files
+android/app/build/
+ios/Pods/
+ios/build/
+ios/Podfile.lock
